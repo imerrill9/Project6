@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class KnapTree
 {
 	public ArrayList<KnapNode> leaves;    // leaves to consider returning to
-	public ArrayList<Item> items;     // items to choose from
-	public int capacity;              // capacity of the Knapsack
+	public ArrayList<Item> items;         // items to choose from
+	public int capacity;                  // capacity of the Knapsack
 
 	private KnapNode head;
 
