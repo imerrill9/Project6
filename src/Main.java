@@ -3,7 +3,6 @@
  */
 public class Main
 {
-
 	private KnapTree knapsackTree;
 
 	public static void main(String[] args)
