@@ -1,16 +1,19 @@
 /**
  * Project 6 Main program functionality
  */
-public class Main {
+public class Main
+{
 
-    KnapTree knapsackTree;
+	private KnapTree knapsackTree;
 
-    public static void main(String[] args) {
-        Main main = new Main();
-        main.Run();
-    }
+	public static void main(String[] args)
+	{
+		Main main = new Main();
+		main.Run();
+	}
 
-    private void Run() {
+	private void Run()
+	{
 
-    }
+	}
 }
