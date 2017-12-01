@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
+/**
+ * Tour is the node of the KnapTree which must calculate it's weight and cost from a list of considered items.
+ *
+ */
 public class Tour {
 
-    private ArrayList<Integer> tourList; //The current tour being considered by the node
+    private ArrayList<Item> itemList;   //The item list being considered by the node
     private int weight;                  //Weight of tourList this node considers
     private int cost;                    //The cost calculated by the node
     private int potential;               //The potential profit gained from this node's children
@@ -12,11 +16,11 @@ public class Tour {
     private Tour leftT;
     private Tour rightT;
 
-    public Tour(ArrayList<Integer> tourList, int weight, int cost) {
-        this.tourList = tourList;
-        calculateWeight(tourList);
-        calculateCost(tourList);
-        calculatePotentialCost(tourList);
+    public Tour(ArrayList<Item> items, int weight, int cost) {
+        this.itemList = items;
+        calculateWeight(items);
+        calculateCost(items);
+        calculatePotentialCost(items);
     }
 
     /**
@@ -24,7 +28,7 @@ public class Tour {
      *
      * @param tourList tour of nodes considered
      */
-    private void calculateWeight(ArrayList<Integer> tourList) {
+    private void calculateWeight(ArrayList<Item> tourList) {
 
     }
 
@@ -33,7 +37,7 @@ public class Tour {
      *
      * @param tourList tour of nodes considered
      */
-    private void calculateCost(ArrayList<Integer> tourList) {
+    private void calculateCost(ArrayList<Item> tourList) {
 
     }
 
@@ -42,7 +46,7 @@ public class Tour {
      *
      * @param tourList tour of nodes considered
      */
-    private void calculatePotentialCost(ArrayList<Integer> tourList) {
+    private void calculatePotentialCost(ArrayList<Item> tourList) {
 
     }
 
