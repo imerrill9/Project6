@@ -9,13 +9,13 @@ public class KnapTree {
     public ArrayList<Item> items;     // items to choose from
     public int capacity;              // capacity of the Knapsack
 
-
     private Tour head;
 
-    public KnapTree(ArrayList<Item> items ){
+    public KnapTree(ArrayList<Item> items, int capacity) {
 
-          this.items = items;
-          head = new Tour(null, 0, 0 );
+        this.capacity = capacity;
+        this.items = items;
+        head = new Tour(null, 0, 0);
     }
 
 

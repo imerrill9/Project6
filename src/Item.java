@@ -10,4 +10,12 @@ public class Item {
         this.price = price;
         this.weight = weight;
     }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
 }
