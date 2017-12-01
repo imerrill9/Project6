@@ -8,7 +8,7 @@ public class KnapNode
 	private ArrayList<Item> itemList;    //The item list being considered by the node
 	private int weight;                  //Weight of tourList this node considers
 	private int cost;                    //The cost calculated by the node
-	private int potential;               //The potential profit gained from this node's children
+	private double potential;            //The potential profit gained from this node's children
 	private boolean prune;               //Should the node be pruned?
 
 	//node attributes
