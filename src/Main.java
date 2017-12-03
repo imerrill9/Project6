@@ -21,14 +21,17 @@ public class Main
 	private void Run()
 	{
 		System.out.println("******* Project 6 *******");
-		System.out.print("Enter data filename: ");
-		String fileName = scan.nextLine();
-
-		try {
-			enterData(fileName);
-		} catch (FileNotFoundException e) {
-			System.out.println("The file was not found.");
-		}
+		boolean fileNotFound = false;
+		do {
+			try {
+				System.out.print("Enter data filename: ");
+				String fileName = scan.nextLine();
+				enterData(fileName);
+			} catch (FileNotFoundException e) {
+				System.out.println("The file was not found.");
+				fileNotFound = true;
+			}
+		} while (fileNotFound);
 	}
 
 	private void enterData(String fileName) throws FileNotFoundException
@@ -45,7 +48,6 @@ public class Main
 		for (int i = 0; i < numItems; i++) {
 			int price = fileScanner.nextInt();
 			int weight = fileScanner.nextInt();
-
 			Item item = new Item(price, weight);
 			items.add(item);
 
