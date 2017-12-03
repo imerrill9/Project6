@@ -19,8 +19,8 @@ public class KnapNode
 	{
 		this.itemList = items;
 		calculateWeight(items);
-		calculateCost(items);
-		calculateBoundCost(items);
+		calculateProfit(items);
+		calculateBound(items);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class KnapNode
 	 *
 	 * @param items list of items being considered by this node
 	 */
-	private void calculateCost(ArrayList<Item> items)
+	private void calculateProfit(ArrayList<Item> items)
 	{
 
 	}
@@ -48,7 +48,7 @@ public class KnapNode
 	 *
 	 * @param items list of items being considered by this node
 	 */
-	private void calculateBoundCost(ArrayList<Item> items)
+	private void calculateBound(ArrayList<Item> items)
 	{
 
 	}
