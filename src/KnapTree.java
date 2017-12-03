@@ -19,5 +19,4 @@ public class KnapTree
 		head = new KnapNode(null, 0, 0);
 	}
 
-
 }
