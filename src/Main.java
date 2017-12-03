@@ -1,4 +1,5 @@
-import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,12 +24,16 @@ public class Main
 		System.out.print("Enter data filename: ");
 		String fileName = scan.nextLine();
 
-		enterData(fileName);
+		try {
+			enterData(fileName);
+		} catch (FileNotFoundException e) {
+			System.out.println("The file was not found.");
+		}
 	}
 
-	private void enterData(String fileName)
+	private void enterData(String fileName) throws FileNotFoundException
 	{
-		Scanner fileScanner = new Scanner(fileName);
+		Scanner fileScanner = new Scanner(new File(fileName));
 		int capacity = fileScanner.nextInt();
 		fileScanner.nextLine();
 
