@@ -19,4 +19,19 @@ public class KnapTree
 		head = new KnapNode(null, 0, 0);
 	}
 
+	public void displayKnapSackData()
+	{
+		System.out.println("Capacity of knapsack is " + capacity + "\n"
+				+ "Items are: ");
+		for (int i = 0; i < items.size(); i++) {
+			System.out.println(items.get(i).getIndex() + ": "
+					+ items.get(i).getPrice() + " "
+					+ items.get(i).getWeight());
+		}
+	}
+
+	public void exploreTree()
+	{
+
+	}
 }

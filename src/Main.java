@@ -21,6 +21,7 @@ public class Main
 	private void Run()
 	{
 		System.out.println("******* Project 6 *******");
+
 		boolean fileNotFound = false;
 		do {
 			try {
@@ -32,6 +33,9 @@ public class Main
 				fileNotFound = true;
 			}
 		} while (fileNotFound);
+
+		System.out.println("\nBegin exploration of the possibilities tree:\n");
+		knapsackTree.exploreTree();
 	}
 
 	private void enterData(String fileName) throws FileNotFoundException
@@ -46,14 +50,16 @@ public class Main
 		ArrayList<Item> items = new ArrayList<>();
 
 		for (int i = 0; i < numItems; i++) {
+			int itemIdx = i + 1;
 			int price = fileScanner.nextInt();
 			int weight = fileScanner.nextInt();
-			Item item = new Item(price, weight);
+			Item item = new Item(itemIdx, price, weight);
 			items.add(item);
 
 			fileScanner.nextLine();
 		}
 
 		knapsackTree = new KnapTree(items, capacity);
+		knapsackTree.displayKnapSackData();
 	}
 }

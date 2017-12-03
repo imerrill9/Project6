@@ -3,22 +3,29 @@
  */
 public class Item
 {
-	private int price;
-	private int weight;
+	private final int INDEX;
+	private final int PRICE;
+	private final int WEIGHT;
 
-	public Item(int price, int weight)
+	public Item(int index, int price, int weight)
 	{
-		this.price = price;
-		this.weight = weight;
+		INDEX = index;
+		PRICE = price;
+		WEIGHT = weight;
 	}
 
 	public int getPrice()
 	{
-		return price;
+		return PRICE;
 	}
 
 	public int getWeight()
 	{
-		return weight;
+		return WEIGHT;
+	}
+
+	public int getIndex()
+	{
+		return INDEX;
 	}
 }
