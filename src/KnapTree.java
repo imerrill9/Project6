@@ -32,6 +32,6 @@ public class KnapTree
 
 	public void exploreTree()
 	{
-
+		head.exploreNode();
 	}
 }

@@ -8,7 +8,7 @@ public class KnapNode
 	private ArrayList<Item> itemList;    //The item list being considered by the node
 	private int weight;                  //Weight of tourList this node considers
 	private int cost;                    //The cost calculated by the node
-	private double potential;            //The potential profit gained from this node's children
+	private double bound;                //The bound calculated from this node's children
 	private boolean prune;               //Should the node be pruned?
 
 	//node attributes
@@ -20,7 +20,7 @@ public class KnapNode
 		this.itemList = items;
 		calculateWeight(items);
 		calculateCost(items);
-		calculatePotentialCost(items);
+		calculateBoundCost(items);
 	}
 
 	/**
@@ -44,11 +44,16 @@ public class KnapNode
 	}
 
 	/**
-	 * Calculate the potential cost using fractions of costs
+	 * Calculate the bound cost using fractions of item costs
 	 *
 	 * @param items list of items being considered by this node
 	 */
-	private void calculatePotentialCost(ArrayList<Item> items)
+	private void calculateBoundCost(ArrayList<Item> items)
+	{
+
+	}
+
+	public void exploreNode()
 	{
 
 	}
