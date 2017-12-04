@@ -22,8 +22,9 @@ public class Main
 	{
 		System.out.println("******* Project 6 *******");
 
-		boolean fileNotFound = false;
+		boolean fileNotFound;
 		do {
+			fileNotFound = false;
 			try {
 				System.out.print("Enter data filename: ");
 				String fileName = scan.nextLine();
