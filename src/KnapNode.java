@@ -5,10 +5,10 @@ import java.util.ArrayList;
  */
 public class KnapNode
 {
-	private ArrayList<Item> itemList;    //The item list being considered by the node
+	public ArrayList<Item> itemList;    //The item list being considered by the node
 	public int weight;                  //Weight of tourList this node considers
 	public int cost;                    //The cost calculated by the node
-	public double bound;                //The bound calculated from this node's children
+	public double profit;                //The profit calculated from this node's children
 	public boolean prune;               //Should the node be pruned?
 	public static int id;
 
@@ -22,8 +22,8 @@ public class KnapNode
 		calculateWeight(items);
 		calculateProfit(items);
 		calculateBound(items);
-		determinePruned(items);
-		id ++;
+		determinePruned();
+		id++;
 		printNode();
 	}
 
@@ -35,8 +35,7 @@ public class KnapNode
 	private void calculateWeight(ArrayList<Item> items)
 	{
 		int totalWeight = 0;
-		for(int index = 0; index < items.size(); index ++)
-		{
+		for (int index = 0; index < items.size(); index++) {
 			totalWeight += items.get(index).getWeight();
 		}
 		weight = totalWeight;
@@ -50,15 +49,14 @@ public class KnapNode
 	private void calculateProfit(ArrayList<Item> items)
 	{
 		int totalPrice = 0;
-		for(int index = 0; index < items.size(); index ++)
-		{
+		for (int index = 0; index < items.size(); index++) {
 			totalPrice += items.get(index).getPrice();
 		}
 		cost = totalPrice;
 	}
 
 	/**
-	 * Calculate the bound cost using fractions of item costs
+	 * Calculate the profit cost using fractions of item costs
 	 *
 	 * @param items list of items being considered by this node
 	 */
@@ -66,10 +64,9 @@ public class KnapNode
 	{
 		// Calculate the price per pound of an item.
 		ArrayList<Double> pricePerUnit = new ArrayList<Double>();
-		for(int index = 0; index < items.size(); index++)
-		{
+		for (int index = 0; index < items.size(); index++) {
 			Item current = items.get(index);
-			pricePerUnit.add(current.getPrice() / current.getWeight());
+			pricePerUnit.add((double) (current.getPrice() / current.getWeight()));
 		}
 
 		int index = 0; // Which item are we on?
@@ -80,31 +77,26 @@ public class KnapNode
 		int currentTotalParts = current.getWeight(); // How much the current item weighs.
 
 		// calculate total weight needed using fractions of weights
-		while(currentWeight < KnapTree.capacity)
-		{
+		while (currentWeight < KnapTree.capacity) {
 			// Add one pound at a time.
-			currentWeight ++;
-			currentPartsAcquired ++;
+			currentWeight++;
+			currentPartsAcquired++;
 			bound += pricePerUnit.get(index);
 			// Have we gotten all the parts of current?
-			if(currentPartsAcquired == currentTotalParts)
-			{
-				index ++;
+			if (currentPartsAcquired == currentTotalParts) {
+				index++;
 				current = items.get(index);
-				int currentPartsAcquired = 0;
-				int currentTotalParts = current.getWeight();
+				currentPartsAcquired = 0;
+				currentTotalParts = current.getWeight();
 			}
 		}
 	}
 
 	public void determinePruned()
 	{
-		if(weight > KnapTree.capacity)
-		{
+		if (weight > KnapTree.capacity) {
 			prune = true;
-		}
-		else
-		{
+		} else {
 			prune = false;
 		}
 	}
@@ -112,10 +104,11 @@ public class KnapNode
 	public void printNode()
 	{
 		System.out.print("< Node " + id + ": items: [");
-		for (int i = 0; i < itemList.size(); i++){
+		for (int i = 0; i < itemList.size(); i++) {
 			System.out.print(itemList.get(i).getIndex() + ", ");
 		}
-		System.out.println("] level: " + KnapTree.level + " profit: " + cost + " weight: " + weight + " bound: " + bound);
+		System.out.println("] level: " + KnapTree.level + " profit: " + cost
+				+ " weight: " + weight + " profit: " + profit);
 	}
 
 
