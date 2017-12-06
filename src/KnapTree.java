@@ -6,7 +6,7 @@ import java.util.HashMap;
  */
 public class KnapTree
 {
-	public ArrayList<KnapNode> leaves;       // leaves to consider returning to
+	public ArrayList<KnapNode> leaves;           // leaves to consider returning to
 	public static ArrayList<Item> items;         // items to choose from
 	public static HashMap<Integer, KnapNode> nodes;
 	public static int capacity;                    // capacity of the Knapsack
