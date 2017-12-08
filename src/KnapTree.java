@@ -10,18 +10,16 @@ public class KnapTree
 	public static ArrayList<Item> items;         // items to choose from
 	public static HashMap<Integer, KnapNode> nodes;
 	public static int capacity;                    // capacity of the Knapsack
-	public static int level = 0;
 	private KnapNode head;
 
 	public KnapTree(ArrayList<Item> items, int capacity)
 	{
-
 		this.capacity = capacity;
 		this.items = items;
-		head = new KnapNode(null);
-		nodes = new HashMap<Integer, KnapNode>();
-		nodes.put(head.id, head);
 		leaves = new ArrayList<KnapNode>();
+		nodes = new HashMap<Integer, KnapNode>();
+		head = new KnapNode(null, 0);
+		nodes.put(head.id, head);
 	}
 
 	public void displayKnapSackData()
@@ -43,9 +41,7 @@ public class KnapTree
 		current.printNode();
 		makeChildren(current);
 
-		while ((!current.leftT.prune && !current.rightT.prune) && (hasValidLeaf(current.bound))) {
-			System.out.print("Exploring ");
-			makeChildren(current);
+		while ((!current.leftT.prune || !current.rightT.prune) || (hasValidLeaf(current.bound))) {
 			double maxBound = 0;
 			int maxID = current.leftT.id;
 			maxBound = current.leftT.bound;
@@ -59,9 +55,25 @@ public class KnapTree
 					maxID = leaves.get(i).id;
 				}
 			}
+			addLeaves(current, maxID);
 			current = nodes.get(maxID);
+			System.out.print("\nExploring ");
+			current.printNode();
+			makeChildren(current);
 		}
 
+	}
+
+	private void addLeaves(KnapNode current, int maxID)
+	{
+		if (current.leftT.id == maxID) {
+			leaves.add(current.rightT);
+		} else if (current.rightT.id == maxID) {
+			leaves.add(current.leftT);
+		} else {
+			leaves.add(current.rightT);
+			leaves.add(current.leftT);
+		}
 	}
 
 	private boolean hasValidLeaf(double bound)
@@ -71,7 +83,7 @@ public class KnapTree
 			return false;
 		} else {
 			for (int index = 0; index < leaves.size(); index++) {
-				if (leaves.get(index).bound > bound) {
+				if (leaves.get(index).bound >= bound) {
 					return true;
 				}
 			}
@@ -87,11 +99,11 @@ public class KnapTree
 		// Create right node list, using next item (KnapTree.level)
 		ArrayList<Item> rightList = new ArrayList<Item>();
 		rightList.addAll(current.itemList);
-		rightList.add(KnapTree.items.get(KnapTree.level));
+		rightList.add(KnapTree.items.get(current.level + 1));
 
 		// Left child
 		System.out.print("Left child is ");
-		current.leftT = new KnapNode(leftList);
+		current.leftT = new KnapNode(leftList, current.level + 1);
 		nodes.put(current.leftT.id, current.leftT);
 		current.leftT.printNode();
 		if (current.leftT.prune) {
@@ -102,7 +114,7 @@ public class KnapTree
 
 		// Right child
 		System.out.print("Right child is ");
-		current.rightT = new KnapNode(rightList);
+		current.rightT = new KnapNode(rightList, current.level + 1);
 		nodes.put(current.rightT.id, current.rightT);
 		current.rightT.printNode();
 		if (current.rightT.prune) {

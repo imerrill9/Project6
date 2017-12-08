@@ -53,12 +53,12 @@ public class KnapNodeTest
 		fullList.add(five);
 		fullList.add(six);
 
-		oneN = new KnapNode(list1);
-		twoN = new KnapNode(list2);
-		threeN = new KnapNode(list3);
-		fourN = new KnapNode(list4);
-		emptyN = new KnapNode(emptyList);
-		fullN = new KnapNode(fullList);
+		oneN = new KnapNode(list1, 0);
+		twoN = new KnapNode(list2, 0);
+		threeN = new KnapNode(list3, 0);
+		fourN = new KnapNode(list4, 0);
+		emptyN = new KnapNode(emptyList, 0);
+		fullN = new KnapNode(fullList, 0);
 	}
 
 	@Test

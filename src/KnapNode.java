@@ -12,16 +12,18 @@ public class KnapNode
 	public double bound;                //The bound calculated by the node
 	public boolean prune;               //Should the node be pruned?
 	public static int id;
+	public int level;
 
 	//node attributes
 	public KnapNode leftT;
 	public KnapNode rightT;
 
-	public KnapNode(ArrayList<Item> items)
+	public KnapNode(ArrayList<Item> items, int level)
 	{
 		if (items == null) {
 			items = new ArrayList<>();
 		}
+		this.level = level;
 		this.itemList = items;
 		calculateWeight(items);
 		calculateProfit(items);
@@ -118,12 +120,12 @@ public class KnapNode
 
 	public void printNode()
 	{
-		System.out.print("<Node " + id + ": items: [");
+		System.out.print("<Node " + id + ": items: [ ");
 		for (int i = 0; i < itemList.size(); i++) {
 			System.out.print(itemList.get(i).getIndex() + " ");
 		}
-		System.out.println("] level: " + KnapTree.level + " profit: " + profit
-				+ " weight: " + weight + " profit: " + profit + ">");
+		System.out.println("] level: " + level + " profit: " + profit
+				+ " weight: " + weight + " bound: " + bound + ">");
 	}
 
 
