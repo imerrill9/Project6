@@ -21,6 +21,7 @@ public class KnapTree
 		head = new KnapNode(null);
 		nodes = new HashMap<Integer, KnapNode>();
 		nodes.put(head.id, head);
+		leaves = new ArrayList<KnapNode>();
 	}
 
 	public void displayKnapSackData()
@@ -36,27 +37,46 @@ public class KnapTree
 
 	public void exploreTree()
 	{
+		// Start with the head.
 		KnapNode current = head;
-		do {
+		System.out.print("Exploring ");
+		current.printNode();
+		makeChildren(current);
+
+		while ((!current.leftT.prune && !current.rightT.prune) && (hasValidLeaf(current.bound))) {
 			System.out.print("Exploring ");
 			makeChildren(current);
 			double maxBound = 0;
 			int maxID = current.leftT.id;
-			maxBound = current.leftT.profit;
-			if (current.rightT.profit > maxBound) {
-				maxBound = current.rightT.profit;
+			maxBound = current.leftT.bound;
+			if (current.rightT.bound > maxBound) {
+				maxBound = current.rightT.bound;
 				maxID = current.rightT.id;
 			}
 			for (int i = 0; i < leaves.size(); i++) {
-				if (leaves.get(i).profit > maxBound) {
-					maxBound = leaves.get(i).profit;
+				if (leaves.get(i).bound > maxBound) {
+					maxBound = leaves.get(i).bound;
 					maxID = leaves.get(i).id;
 				}
 			}
 			current = nodes.get(maxID);
 		}
-		while (current.leftT.prune && current.rightT.prune);
 
+	}
+
+	private boolean hasValidLeaf(double bound)
+	{
+		// Are there any leaves to consider?
+		if (leaves.isEmpty()) {
+			return false;
+		} else {
+			for (int index = 0; index < leaves.size(); index++) {
+				if (leaves.get(index).bound > bound) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 
 	public void makeChildren(KnapNode current)
@@ -72,6 +92,8 @@ public class KnapTree
 		// Left child
 		System.out.print("Left child is ");
 		current.leftT = new KnapNode(leftList);
+		nodes.put(current.leftT.id, current.leftT);
+		current.leftT.printNode();
 		if (current.leftT.prune) {
 			System.out.println("pruned because too heavy");
 		} else {
@@ -81,6 +103,8 @@ public class KnapTree
 		// Right child
 		System.out.print("Right child is ");
 		current.rightT = new KnapNode(rightList);
+		nodes.put(current.rightT.id, current.rightT);
+		current.rightT.printNode();
 		if (current.rightT.prune) {
 			System.out.println("pruned because too heavy");
 		} else {

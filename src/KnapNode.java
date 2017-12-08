@@ -28,7 +28,6 @@ public class KnapNode
 		calculateBound(items);
 		determinePruned();
 		id++;
-		printNode();
 	}
 
 	/**
