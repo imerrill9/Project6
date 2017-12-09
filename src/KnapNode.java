@@ -6,12 +6,13 @@ import java.util.TreeMap;
  */
 public class KnapNode
 {
+   public static int numNodes = 0;
 	public ArrayList<Item> itemList;    //The item list being considered by the node
 	public int weight;                  //Weight of tourList this node considers
 	public int profit;                  //The profit calculated by the node
 	public double bound;                //The bound calculated by the node
 	public boolean prune;               //Should the node be pruned?
-	public static int id;
+	public int id;
 	public int level;
 
 	//node attributes
@@ -29,7 +30,8 @@ public class KnapNode
 		calculateProfit(items);
 		calculateBound(items);
 		determinePruned();
-		id++;
+		numNodes++;
+      id = numNodes;
 	}
 
 	/**
@@ -128,5 +130,22 @@ public class KnapNode
 				+ " weight: " + weight + " bound: " + bound + ">");
 	}
 
-
+   public boolean canBeExplored(KnapNode max)
+   {
+      if (prune) {
+         System.out.println("pruned because too heavy");
+         return false;
+      } else if(weight == KnapTree.capacity) {
+         System.out.println("reached capacity, no need to explore further");
+         return false;
+      } else if(bound < max.profit) {
+         System.out.println("pruned because bound " + bound +
+            "is less than known achievable profit " + max.profit);
+         return false;
+      } else {
+         System.out.println("can be explored further");
+         return true;
+      }
+      
+   }
 }

@@ -37,29 +37,36 @@ public class KnapTree
 	{
 		// Start with the head.
 		KnapNode current = head;
+      KnapNode max = current;
 		System.out.print("Exploring ");
 		current.printNode();
 		makeChildren(current);
 
 		while ((!current.leftT.prune || !current.rightT.prune) || (hasValidLeaf(current.bound))) {
-			double maxBound = 0;
-			int maxID = current.leftT.id;
-			maxBound = current.leftT.bound;
-			if (current.rightT.bound > maxBound) {
-				maxBound = current.rightT.bound;
-				maxID = current.rightT.id;
-			}
-			for (int i = 0; i < leaves.size(); i++) {
-				if (leaves.get(i).bound > maxBound) {
-					maxBound = leaves.get(i).bound;
-					maxID = leaves.get(i).id;
-				}
-			}
-			addLeaves(current, maxID);
-			current = nodes.get(maxID);
+         KnapNode temp = current;
+         System.out.print("Left child is ");
+		   current.leftT.printNode();
+         if(current.leftT.canBeExplored(max)) {
+ 			   temp = current.leftT;
+         }
+         System.out.print("Right child is ");
+		   current.rightT.printNode();
+ 			if ((current.leftT.canBeExplored(max)) && (current.leftT.bound < current.rightT.bound)) {
+ 				temp = current.rightT;
+ 			}
+ 			for (int i = 0; i < leaves.size(); i++) {
+ 				if (!(leaves.get(i).prune) && (leaves.get(i).canBeExplored(max))) {
+ 					temp = leaves.get(i);
+ 				}
+ 			}
+			addLeaves(current, max.id);
+         if(max.profit < temp.profit) {
+            max = temp;
+         }
+ 			current = nodes.get(temp.id);
 			System.out.print("\nExploring ");
 			current.printNode();
-			makeChildren(current);
+			makeChildren(current);      
 		}
 
 	}
@@ -99,28 +106,14 @@ public class KnapTree
 		// Create right node list, using next item (KnapTree.level)
 		ArrayList<Item> rightList = new ArrayList<Item>();
 		rightList.addAll(current.itemList);
-		rightList.add(KnapTree.items.get(current.level + 1));
+		rightList.add(KnapTree.items.get(current.level));
 
 		// Left child
-		System.out.print("Left child is ");
 		current.leftT = new KnapNode(leftList, current.level + 1);
 		nodes.put(current.leftT.id, current.leftT);
-		current.leftT.printNode();
-		if (current.leftT.prune) {
-			System.out.println("pruned because too heavy");
-		} else {
-			System.out.println("exploring further");
-		}
 
 		// Right child
-		System.out.print("Right child is ");
-		current.rightT = new KnapNode(rightList, current.level + 1);
+      current.rightT = new KnapNode(rightList, current.level + 1);
 		nodes.put(current.rightT.id, current.rightT);
-		current.rightT.printNode();
-		if (current.rightT.prune) {
-			System.out.println("pruned because too heavy");
-		} else {
-			System.out.println("exploring further");
-		}
 	}
 }
