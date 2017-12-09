@@ -20,9 +20,7 @@ public class KnapNode implements Comparable<KnapNode>
 
 	public KnapNode(ArrayList<Item> items, int level)
 	{
-		if (items == null) {
-			items = new ArrayList<>();
-		}
+		this.itemList = items;
 		this.level = level;
 		this.itemList = items;
 		calculateWeight(items);
