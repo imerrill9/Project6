@@ -22,10 +22,17 @@ public class KnapTree
 			@Override
 			public int compare(KnapNode o1, KnapNode o2)
 			{
-				return (int) (o2.bound - o1.bound);
+				if (o2.bound > o1.bound) {
+					return 1;
+				} else if (o2.bound < o1.bound) {
+					return -1;
+				} else {
+					return 0;
+				}
 			}
 		});
 		head = new KnapNode(new ArrayList<Item>(), 0);
+		max = head;
 	}
 
 	public void displayKnapSackData()
@@ -46,59 +53,62 @@ public class KnapTree
 		current.printNode();
 		makeChildren(current);
 		while (!current.leftT.prune || !current.rightT.prune || hasValidLeaf(current.bound)) {
-			current = getMaxNode(current);
-			max = current;
+			current = getNextNode(current);
 			System.out.print("\nExploring ");
 			current.printNode();
-			makeChildren(current);
+			if (current.prune) {
+				System.out.println(current.message);
+			} else {
+				makeChildren(current);
+			}
 		}
 	}
 
-	private KnapNode getMaxNode(KnapNode current)
+	private KnapNode getNextNode(KnapNode current)
 	{
-		KnapNode maxNode;
+		KnapNode nextNode;
 		if ((!current.leftT.prune) && (!current.rightT.prune) && (hasValidLeaf(current.bound))) {
 			//left child, child and leaves can all be considered.
 			if (current.leftT.bound >= current.rightT.bound) {
-				maxNode = current.leftT;
+				nextNode = current.leftT;
 			} else {
-				maxNode = current.rightT;
+				nextNode = current.rightT;
 			}
-			if (leaves.peek().bound > maxNode.bound) {
-				maxNode = leaves.peek();
+			if (leaves.peek().bound > nextNode.bound) {
+				nextNode = leaves.peek();
 			}
 		} else if ((current.leftT.prune) && (!current.rightT.prune) && (hasValidLeaf(current.bound))) {
 			//right right child and leaves can be considered
 			if (leaves.peek().bound < current.rightT.bound) {
-				maxNode = current.rightT;
+				nextNode = current.rightT;
 			} else {
-				maxNode = leaves.peek();
+				nextNode = leaves.peek();
 			}
 		} else if ((!current.leftT.prune) && (current.rightT.prune) && (hasValidLeaf(current.bound))) {
 			//left child and leaves can be considered
 			if (leaves.peek().bound < current.leftT.bound) {
-				maxNode = current.leftT;
+				nextNode = current.leftT;
 			} else {
-				maxNode = leaves.peek();
+				nextNode = leaves.peek();
 			}
 		} else if ((!current.leftT.prune) && (!current.rightT.prune) && (!hasValidLeaf(current.bound))) {
 			//left child and right child but no leaves can be considered
 			if (current.leftT.bound >= current.rightT.bound) {
-				maxNode = current.leftT;
+				nextNode = current.leftT;
 			} else {
-				maxNode = current.rightT;
+				nextNode = current.rightT;
 			}
 		} else if ((!current.leftT.prune) && (current.rightT.prune) && (!hasValidLeaf(current.bound))) {
 			//left child only
-			maxNode = current.leftT;
+			nextNode = current.leftT;
 		} else if ((current.leftT.prune) && (!current.rightT.prune) && (!hasValidLeaf(current.bound))) {
 			//right child only
-			maxNode = current.rightT;
+			nextNode = current.rightT;
 		} else {
 			//should never occur
-			maxNode = null;
+			nextNode = null;
 		}
-		return maxNode;
+		return nextNode;
 	}
 
 	private boolean hasValidLeaf(double bound)
@@ -128,9 +138,8 @@ public class KnapTree
 			System.out.println(current.leftT.message);
 			if (!current.leftT.prune) {
 				leaves.add(current.leftT);
-			} else {
-
 			}
+
 			// Right child
 			current.rightT = new KnapNode(rightList, current.level + 1);
 			System.out.print("Right child is ");

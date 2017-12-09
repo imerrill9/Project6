@@ -21,6 +21,8 @@ public class KnapNode
 
 	public KnapNode(ArrayList<Item> items, int level)
 	{
+		numNodes++;
+		id = numNodes;
 		this.itemList = items;
 		this.level = level;
 		this.itemList = items;
@@ -28,8 +30,6 @@ public class KnapNode
 		calculateProfit(items);
 		calculateBound();
 		determinePruned();
-		numNodes++;
-		id = numNodes;
 	}
 
 	/**
@@ -89,19 +89,27 @@ public class KnapNode
 
 	public void determinePruned()
 	{
-		if (weight == KnapTree.capacity) {
-			message = "hit capacity exactly so don't explore further";
-			prune = true;
-		} else if (weight > KnapTree.capacity) {
-			message = "pruned because too heavy";
-			prune = true;
-		} else if (KnapTree.max != null && bound < KnapTree.max.profit) {
-			message = "pruned because bound " + bound + " is smaller than known achievable profit "
-					+ KnapTree.max.profit;
-			prune = true;
-		} else {
-			message = "explore further";
-			prune = false;
+		if (KnapTree.max != null) {
+			if (weight == KnapTree.capacity) {
+				message = "hit capacity exactly so don't explore further";
+				if (this.profit > KnapTree.max.profit) {
+					KnapTree.max = this;
+				}
+				prune = true;
+			} else if (weight > KnapTree.capacity) {
+				message = "pruned because too heavy";
+				prune = true;
+			} else if (bound < KnapTree.max.profit) {
+				message = "pruned because bound " + bound + " is smaller than known achievable profit "
+						+ KnapTree.max.profit;
+				prune = true;
+			} else {
+				message = "explore further";
+				if (this.profit > KnapTree.max.profit) {
+					KnapTree.max = this;
+				}
+				prune = false;
+			}
 		}
 	}
 
