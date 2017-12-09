@@ -33,6 +33,7 @@ public class KnapTree
 		});
 		head = new KnapNode(new ArrayList<Item>(), 0);
 		max = head;
+		leaves.add(head);
 	}
 
 	public void displayKnapSackData()
@@ -52,104 +53,60 @@ public class KnapTree
 		System.out.print("Exploring ");
 		current.printNode();
 		makeChildren(current);
-		while (!current.leftT.prune || !current.rightT.prune || hasValidLeaf(current.bound)) {
-			current = getNextNode(current);
+		while (!leaves.isEmpty()) {
+			current = leaves.peek();
 			System.out.print("\nExploring ");
 			current.printNode();
-			if (current.prune) {
-				System.out.println(current.message);
-			} else {
-				makeChildren(current);
-			}
+			makeChildren(current);
 		}
+		printBestNode();
 	}
 
-	private KnapNode getNextNode(KnapNode current)
+	private void printBestNode()
 	{
-		KnapNode nextNode;
-		if ((!current.leftT.prune) && (!current.rightT.prune) && (hasValidLeaf(current.bound))) {
-			//left child, child and leaves can all be considered.
-			if (current.leftT.bound >= current.rightT.bound) {
-				nextNode = current.leftT;
-			} else {
-				nextNode = current.rightT;
-			}
-			if (leaves.peek().bound > nextNode.bound) {
-				nextNode = leaves.peek();
-			}
-		} else if ((current.leftT.prune) && (!current.rightT.prune) && (hasValidLeaf(current.bound))) {
-			//right right child and leaves can be considered
-			if (leaves.peek().bound < current.rightT.bound) {
-				nextNode = current.rightT;
-			} else {
-				nextNode = leaves.peek();
-			}
-		} else if ((!current.leftT.prune) && (current.rightT.prune) && (hasValidLeaf(current.bound))) {
-			//left child and leaves can be considered
-			if (leaves.peek().bound < current.leftT.bound) {
-				nextNode = current.leftT;
-			} else {
-				nextNode = leaves.peek();
-			}
-		} else if ((!current.leftT.prune) && (!current.rightT.prune) && (!hasValidLeaf(current.bound))) {
-			//left child and right child but no leaves can be considered
-			if (current.leftT.bound >= current.rightT.bound) {
-				nextNode = current.leftT;
-			} else {
-				nextNode = current.rightT;
-			}
-		} else if ((!current.leftT.prune) && (current.rightT.prune) && (!hasValidLeaf(current.bound))) {
-			//left child only
-			nextNode = current.leftT;
-		} else if ((current.leftT.prune) && (!current.rightT.prune) && (!hasValidLeaf(current.bound))) {
-			//right child only
-			nextNode = current.rightT;
-		} else {
-			//should never occur
-			nextNode = null;
-		}
-		return nextNode;
-	}
-
-	private boolean hasValidLeaf(double bound)
-	{
-		if (leaves.peek().bound >= bound) {
-			return true;
-		} else {
-			return false;
-		}
+		System.out.print("\nBest Node: ");
+		max.printNode();
 	}
 
 	public void makeChildren(KnapNode current)
 	{
 		if (current.level < items.size()) {
-			// Create left node list, not using next item (KnapTree.level)
-			ArrayList<Item> leftList = new ArrayList<Item>();
-			leftList.addAll(current.itemList);
-			// Create right node list, using next item (KnapTree.level)
-			ArrayList<Item> rightList = new ArrayList<Item>();
-			rightList.addAll(current.itemList);
-			rightList.add(KnapTree.items.get(current.level));
+			if (current.bound < max.profit) {
+				System.out.println("pruned because bound " + current.bound
+						+ " is smaller than known achievable profit " + max.profit);
+				// Remove Parent
+				leaves.remove(current);
+			} else {
 
-			// Left child
-			current.leftT = new KnapNode(leftList, current.level + 1);
-			System.out.print("Left child is ");
-			current.leftT.printNode();
-			System.out.println(current.leftT.message);
-			if (!current.leftT.prune) {
-				leaves.add(current.leftT);
+				// Create left node list, not using next item (KnapTree.level)
+				ArrayList<Item> leftList = new ArrayList<Item>();
+				leftList.addAll(current.itemList);
+				// Create right node list, using next item (KnapTree.level)
+				ArrayList<Item> rightList = new ArrayList<Item>();
+				rightList.addAll(current.itemList);
+				rightList.add(KnapTree.items.get(current.level));
+
+				// Left child
+				current.leftT = new KnapNode(leftList, current.level + 1);
+				System.out.print("Left child is ");
+				current.leftT.printNode();
+				System.out.println(current.leftT.message);
+				if (!current.leftT.prune) {
+					leaves.add(current.leftT);
+				}
+
+				// Right child
+				current.rightT = new KnapNode(rightList, current.level + 1);
+				System.out.print("Right child is ");
+				current.rightT.printNode();
+				System.out.println(current.rightT.message);
+				if (!current.rightT.prune) {
+					leaves.add(current.rightT);
+				}
+
+				// Remove Parent
+				leaves.remove(current);
 			}
-
-			// Right child
-			current.rightT = new KnapNode(rightList, current.level + 1);
-			System.out.print("Right child is ");
-			current.rightT.printNode();
-			System.out.println(current.rightT.message);
-			if (!current.rightT.prune) {
-				leaves.add(current.rightT);
-			}
-
-			leaves.remove(current);
 		}
 	}
 }
