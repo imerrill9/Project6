@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
  */
 public class KnapTree
 {
-	public PriorityQueue<KnapNode> leaves;      // leaves to consider returning to
+	private PriorityQueue<KnapNode> leaves;     // leaves to consider returning to
 	public static ArrayList<Item> items;        // items to choose from
 	public static int capacity;                 // capacity of the Knapsack
 	private KnapNode head;
@@ -36,6 +36,9 @@ public class KnapTree
 		leaves.add(head);
 	}
 
+	/**
+	 * Displays Knapsack capacity and the items that it can potentially hold
+	 */
 	public void displayKnapSackData()
 	{
 		System.out.println("Capacity of knapsack is " + capacity + "\n"
@@ -47,6 +50,11 @@ public class KnapTree
 		}
 	}
 
+	/**
+	 * Traverses KnapTree by making children, determining whether those children
+	 * and deciding between all children and leaves which node to traverse to in
+	 * the tree next.
+	 */
 	public void exploreTree()
 	{
 		KnapNode current = head;
@@ -62,12 +70,12 @@ public class KnapTree
 		printBestNode();
 	}
 
-	private void printBestNode()
-	{
-		System.out.print("\nBest Node: ");
-		max.printNode();
-	}
-
+	/**
+	 * Creates a left child which won't consider the item corresponding to the next level
+	 * in the tree, and a right child which will consider using that item. The parent is
+	 * removed from the queue of leaves while each child if not pruned is added.
+	 * @param current the parent Node in the tree
+	 */
 	public void makeChildren(KnapNode current)
 	{
 		if (current.level < items.size()) {
@@ -108,5 +116,14 @@ public class KnapTree
 				leaves.remove(current);
 			}
 		}
+	}
+
+	/**
+	 * After no more leaves are considered the best node's data is displayed
+	 */
+	private void printBestNode()
+	{
+		System.out.print("\nBest Node: ");
+		max.printNode();
 	}
 }

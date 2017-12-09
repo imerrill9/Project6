@@ -1,19 +1,21 @@
 import java.util.ArrayList;
 
 /**
- * KnapNode is the node of the KnapTree which must calculate it's weight and cost from a list of considered items.
+ * KnapNode is the node of the KnapTree which must calculate it's weight
+ * and cost from a list of considered items.
  */
 public class KnapNode
 {
-	public static int numNodes = 0;
+	private static int numNodes = 0;
+	private int id;                     //id of node
+	private int weight;                 //Weight of tourList this node considers
+
 	public ArrayList<Item> itemList;    //The item list being considered by the node
-	public int weight;                  //Weight of tourList this node considers
 	public int profit;                  //The profit calculated by the node
 	public double bound;                //The bound calculated by the node
 	public boolean prune;               //Should the node be pruned?
-	public String message;
-	public int id;
-	public int level;
+	public String message;              //Holds the pruned message
+	public int level;                   //The level in the tree this node is created at
 
 	//node attributes
 	public KnapNode leftT;
@@ -60,6 +62,9 @@ public class KnapNode
 		profit = totalPrice;
 	}
 
+	/**
+	 * Calculate the bound of the node
+	 */
 	private void calculateBound()
 	{
 		bound = profit;
@@ -87,7 +92,11 @@ public class KnapNode
 		return weightNeeded * pricePerPound;
 	}
 
-	public void determinePruned()
+	/**
+	 * Determines if the node should be pruned, displays corresponding messages
+	 * and sets a new maximum profit if greater than existing maximum.
+	 */
+	private void determinePruned()
 	{
 		if (KnapTree.max != null) {
 			if (weight == KnapTree.capacity) {
@@ -115,6 +124,9 @@ public class KnapNode
 		}
 	}
 
+	/**
+	 * Displays node's data
+	 */
 	public void printNode()
 	{
 		System.out.print("<Node " + id + ": items: [ ");

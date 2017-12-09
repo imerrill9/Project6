@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Project 6 Main program functionality
+ * Project 6 Main program functionality. This program demonstrates a branch and
+ * bound algorithm for the 0-1 knapsack problem. Given a file of item data and
+ * knapsack capacity the algorithm finds which items to carry in the sack to
+ * maximize profit.
+ *
+ * @author Ian Merrill
+ * @author Erin Gurnett
+ * @author Joseph Medina
  */
-public class Main
+public class Proj6
 {
 	private KnapTree knapsackTree;
 
@@ -14,7 +21,7 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Main main = new Main();
+		Proj6 main = new Proj6();
 		main.Run();
 	}
 
