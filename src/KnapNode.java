@@ -1,12 +1,11 @@
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 /**
  * KnapNode is the node of the KnapTree which must calculate it's weight and cost from a list of considered items.
  */
 public class KnapNode
 {
-   public static int numNodes = 0;
+	public static int numNodes = 0;
 	public ArrayList<Item> itemList;    //The item list being considered by the node
 	public int weight;                  //Weight of tourList this node considers
 	public int profit;                  //The profit calculated by the node
@@ -28,10 +27,10 @@ public class KnapNode
 		this.itemList = items;
 		calculateWeight(items);
 		calculateProfit(items);
-		calculateBound(items);
+		calculateBound();
 		determinePruned();
 		numNodes++;
-      id = numNodes;
+		id = numNodes;
 	}
 
 	/**
@@ -62,42 +61,20 @@ public class KnapNode
 		profit = totalPrice;
 	}
 
-	/**
-	 * Calculate the bound using fractions of item profits
-	 *
-	 * @param items list of items being considered by this node
-	 */
-	private void calculateBound(ArrayList<Item> items)
+	private void calculateBound()
 	{
-		bound = 0;
-		int pounds = 0;
-		for (int i = 0; i < items.size(); i++) { //add all items to bound regardless
-			pounds += items.get(i).getWeight();
-			bound += items.get(i).getPrice();
-		}
-
-		if (pounds < KnapTree.capacity) {
-			//need to continue with items proceeding items in local list
-			//meaning we start using KnapTree full list of items from whatever
-			//the last local item's index was
-			int startIndex;
-			if (items.size() == 0) {
-				startIndex = 0; //if the items list was empty start at 0 for main list
-			} else if (KnapTree.items.size() > items.get(items.size() - 1).getIndex()) {
-				startIndex = items.get(items.size() - 1).getIndex(); //else it's the last items index
+		bound = profit;
+		int pounds = weight;
+		for (int i = level; i < KnapTree.items.size(); i++) {
+			if (pounds == KnapTree.capacity) {
+				break;
 			} else {
-				startIndex = KnapTree.items.size(); // skip loop
-			}
-
-			for (int i = startIndex; i < KnapTree.items.size(); i++) {
+				bound += KnapTree.items.get(i).getPrice();
 				pounds += KnapTree.items.get(i).getWeight();
-				if (pounds < KnapTree.capacity) {
-					bound += KnapTree.items.get(i).getPrice();
-				} else {
-					//fractional weight added
-					pounds -= KnapTree.items.get(i).getWeight(); //reset
+				if (pounds > KnapTree.capacity) {
+					bound -= KnapTree.items.get(i).getPrice(); //reset
+					pounds -= KnapTree.items.get(i).getWeight();
 					bound += fractionalProfit(pounds, KnapTree.items.get(i));
-					pounds = KnapTree.capacity;
 					break;
 				}
 			}
@@ -129,23 +106,4 @@ public class KnapNode
 		System.out.println("] level: " + level + " profit: " + profit
 				+ " weight: " + weight + " bound: " + bound + ">");
 	}
-
-   public boolean canBeExplored(KnapNode max)
-   {
-      if (prune) {
-         System.out.println("pruned because too heavy");
-         return false;
-      } else if(weight == KnapTree.capacity) {
-         System.out.println("reached capacity, no need to explore further");
-         return false;
-      } else if(bound < max.profit) {
-         System.out.println("pruned because bound " + bound +
-            "is less than known achievable profit " + max.profit);
-         return false;
-      } else {
-         System.out.println("can be explored further");
-         return true;
-      }
-      
-   }
 }
