@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * KnapNode is the node of the KnapTree which must calculate it's weight and cost from a list of considered items.
  */
-public class KnapNode
+public class KnapNode implements Comparable<KnapNode>
 {
 	public static int numNodes = 0;
 	public ArrayList<Item> itemList;    //The item list being considered by the node
@@ -105,5 +105,17 @@ public class KnapNode
 		}
 		System.out.println("] level: " + level + " profit: " + profit
 				+ " weight: " + weight + " bound: " + bound + ">");
+	}
+
+	@Override
+	public int compareTo(KnapNode o)
+	{
+		if (bound < o.bound) {
+			return -1;
+		} else if (bound > o.bound) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

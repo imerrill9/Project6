@@ -1,14 +1,13 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  * Binary Knapsack tree
  */
 public class KnapTree
 {
-	public ArrayList<KnapNode> leaves;           // leaves to consider returning to
+	public PriorityQueue<KnapNode> leaves;           // leaves to consider returning to
 	public static ArrayList<Item> items;         // items to choose from
-	public static HashMap<Integer, KnapNode> nodes;
 	public static int capacity;                    // capacity of the Knapsack
 	private KnapNode head;
 	public static KnapNode max;
@@ -17,10 +16,8 @@ public class KnapTree
 	{
 		this.capacity = capacity;
 		this.items = items;
-		leaves = new ArrayList<KnapNode>();
-		nodes = new HashMap<Integer, KnapNode>();
+		leaves = new PriorityQueue<>();
 		head = new KnapNode(null, 0);
-		nodes.put(head.id, head);
 	}
 
 	public void displayKnapSackData()
@@ -41,20 +38,18 @@ public class KnapTree
 		current.printNode();
 		makeChildren(current);
 		while (!current.leftT.prune || !current.rightT.prune || hasValidLeaf(current.bound)) {
-			int maxID = current.leftT.id;
-			double maxBound = current.leftT.bound;
-			if (current.rightT.bound > maxBound) {
-				maxBound = current.rightT.bound;
-				maxID = current.rightT.id;
+			int maxID;
+			KnapNode maxNode;
+			if (current.leftT.bound > current.rightT.bound) {
+				maxNode = current.leftT;
+			} else {
+				maxNode = current.rightT;
 			}
-			for (int i = 0; i < leaves.size(); i++) {
-				if (leaves.get(i).bound > maxBound) {
-					maxBound = leaves.get(i).bound;
-					maxID = leaves.get(i).id;
-				}
+			if (leaves.peek().bound > maxNode.bound) {
+				maxNode = leaves.peek();
 			}
-			addLeaves(current, maxID);
-			current = nodes.get(maxID);
+
+			current = maxNode;
 			System.out.print("\nExploring ");
 			current.printNode();
 			makeChildren(current);
@@ -62,29 +57,11 @@ public class KnapTree
 
 	}
 
-	private void addLeaves(KnapNode current, int maxID)
-	{
-		if (current.leftT.id == maxID && current.id != maxID) {
-			leaves.add(current.rightT);
-		} else if (current.rightT.id == maxID && current.id != maxID) {
-			leaves.add(current.leftT);
-		} else {
-			leaves.add(current.rightT);
-			leaves.add(current.leftT);
-		}
-	}
-
 	private boolean hasValidLeaf(double bound)
 	{
-		// Are there any leaves to consider?
-		if (leaves.isEmpty()) {
-			return false;
+		if (leaves.peek().bound > bound) {
+			return true;
 		} else {
-			for (int index = 0; index < leaves.size(); index++) {
-				if (leaves.get(index).bound >= bound) {
-					return true;
-				}
-			}
 			return false;
 		}
 	}
@@ -104,13 +81,19 @@ public class KnapTree
 			current.leftT = new KnapNode(leftList, current.level + 1);
 			System.out.print("Left child is ");
 			current.leftT.printNode();
-			nodes.put(current.leftT.id, current.leftT);
+			if (!current.leftT.prune) {
+				leaves.add(current.leftT);
+			}
 
 			// Right child
 			current.rightT = new KnapNode(rightList, current.level + 1);
 			System.out.print("Right child is ");
 			current.rightT.printNode();
-			nodes.put(current.rightT.id, current.rightT);
+			if (!current.rightT.prune) {
+				leaves.add(current.rightT);
+			}
+
+			leaves.remove(current);
 		}
 	}
 }
