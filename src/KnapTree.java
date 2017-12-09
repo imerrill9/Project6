@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
@@ -16,7 +17,14 @@ public class KnapTree
 	{
 		this.capacity = capacity;
 		this.items = items;
-		leaves = new PriorityQueue<>();
+		leaves = new PriorityQueue<>(new Comparator<KnapNode>()
+		{
+			@Override
+			public int compare(KnapNode o1, KnapNode o2)
+			{
+				return (int) (o2.bound - o1.bound);
+			}
+		});
 		head = new KnapNode(new ArrayList<Item>(), 0);
 	}
 
@@ -39,11 +47,11 @@ public class KnapTree
 		makeChildren(current);
 		while (!current.leftT.prune || !current.rightT.prune || hasValidLeaf(current.bound)) {
 			current = getMaxNode(current);
+			max = current;
 			System.out.print("\nExploring ");
 			current.printNode();
 			makeChildren(current);
 		}
-
 	}
 
 	private KnapNode getMaxNode(KnapNode current)
@@ -80,6 +88,12 @@ public class KnapTree
 			} else {
 				maxNode = current.rightT;
 			}
+		} else if ((!current.leftT.prune) && (current.rightT.prune) && (!hasValidLeaf(current.bound))) {
+			//left child only
+			maxNode = current.leftT;
+		} else if ((current.leftT.prune) && (!current.rightT.prune) && (!hasValidLeaf(current.bound))) {
+			//right child only
+			maxNode = current.rightT;
 		} else {
 			//should never occur
 			maxNode = null;
@@ -111,14 +125,17 @@ public class KnapTree
 			current.leftT = new KnapNode(leftList, current.level + 1);
 			System.out.print("Left child is ");
 			current.leftT.printNode();
+			System.out.println(current.leftT.message);
 			if (!current.leftT.prune) {
 				leaves.add(current.leftT);
-			}
+			} else {
 
+			}
 			// Right child
 			current.rightT = new KnapNode(rightList, current.level + 1);
 			System.out.print("Right child is ");
 			current.rightT.printNode();
+			System.out.println(current.rightT.message);
 			if (!current.rightT.prune) {
 				leaves.add(current.rightT);
 			}

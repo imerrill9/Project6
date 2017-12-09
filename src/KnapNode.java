@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * KnapNode is the node of the KnapTree which must calculate it's weight and cost from a list of considered items.
  */
-public class KnapNode implements Comparable<KnapNode>
+public class KnapNode
 {
 	public static int numNodes = 0;
 	public ArrayList<Item> itemList;    //The item list being considered by the node
@@ -11,6 +11,7 @@ public class KnapNode implements Comparable<KnapNode>
 	public int profit;                  //The profit calculated by the node
 	public double bound;                //The bound calculated by the node
 	public boolean prune;               //Should the node be pruned?
+	public String message;
 	public int id;
 	public int level;
 
@@ -64,7 +65,7 @@ public class KnapNode implements Comparable<KnapNode>
 		bound = profit;
 		int pounds = weight;
 		for (int i = level; i < KnapTree.items.size(); i++) {
-			if (pounds == KnapTree.capacity) {
+			if (pounds >= KnapTree.capacity) {
 				break;
 			} else {
 				bound += KnapTree.items.get(i).getPrice();
@@ -88,9 +89,18 @@ public class KnapNode implements Comparable<KnapNode>
 
 	public void determinePruned()
 	{
-		if (weight > KnapTree.capacity) {
+		if (weight == KnapTree.capacity) {
+			message = "hit capacity exactly so don't explore further";
+			prune = true;
+		} else if (weight > KnapTree.capacity) {
+			message = "pruned because too heavy";
+			prune = true;
+		} else if (KnapTree.max != null && bound < KnapTree.max.profit) {
+			message = "pruned because bound " + bound + " is smaller than known achievable profit "
+					+ KnapTree.max.profit;
 			prune = true;
 		} else {
+			message = "explore further";
 			prune = false;
 		}
 	}
@@ -103,17 +113,5 @@ public class KnapNode implements Comparable<KnapNode>
 		}
 		System.out.println("] level: " + level + " profit: " + profit
 				+ " weight: " + weight + " bound: " + bound + ">");
-	}
-
-	@Override
-	public int compareTo(KnapNode o)
-	{
-		if (bound < o.bound) {
-			return -1;
-		} else if (bound > o.bound) {
-			return 1;
-		} else {
-			return 0;
-		}
 	}
 }
