@@ -7,11 +7,12 @@ import java.util.PriorityQueue;
  */
 public class KnapTree
 {
-	private PriorityQueue<KnapNode> leaves;     // leaves to consider returning to
-	public static ArrayList<Item> items;        // items to choose from
-	public static int capacity;                 // capacity of the Knapsack
+	public static ArrayList<Item> items;      // items to choose from
+	public static KnapNode max;               // maximum profit achievable Node
+	public static int capacity;               // capacity of the Knapsack
+
+	private PriorityQueue<KnapNode> leaves;   // leaves to consider returning to
 	private KnapNode head;
-	public static KnapNode max;
 
 	public KnapTree(ArrayList<Item> items, int capacity)
 	{
@@ -95,21 +96,21 @@ public class KnapTree
 				rightList.add(KnapTree.items.get(current.level));
 
 				// Left child
-				current.leftT = new KnapNode(leftList, current.level + 1);
+				current.left = new KnapNode(leftList, current.level + 1);
 				System.out.print("Left child is ");
-				current.leftT.printNode();
-				System.out.println(current.leftT.message);
-				if (!current.leftT.prune) {
-					leaves.add(current.leftT);
+				current.left.printNode();
+				System.out.println(current.left.message);
+				if (!current.left.prune) {
+					leaves.add(current.left);
 				}
 
 				// Right child
-				current.rightT = new KnapNode(rightList, current.level + 1);
+				current.right = new KnapNode(rightList, current.level + 1);
 				System.out.print("Right child is ");
-				current.rightT.printNode();
-				System.out.println(current.rightT.message);
-				if (!current.rightT.prune) {
-					leaves.add(current.rightT);
+				current.right.printNode();
+				System.out.println(current.right.message);
+				if (!current.right.prune) {
+					leaves.add(current.right);
 				}
 
 				// Remove Parent

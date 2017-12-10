@@ -18,8 +18,8 @@ public class KnapNode
 	public int level;                   //The level in the tree this node is created at
 
 	//node attributes
-	public KnapNode leftT;
-	public KnapNode rightT;
+	public KnapNode left;
+	public KnapNode right;
 
 	public KnapNode(ArrayList<Item> items, int level)
 	{
@@ -103,7 +103,7 @@ public class KnapNode
 				message = "hit capacity exactly so don't explore further";
 				if (this.profit > KnapTree.max.profit) {
 					KnapTree.max = this;
-					System.out.println("note achievable profit of " + profit);
+					message += "\nnote achievable profit of " + profit;
 				}
 				prune = true;
 			} else if (weight > KnapTree.capacity) {
@@ -117,7 +117,7 @@ public class KnapNode
 				message = "explore further";
 				if (this.profit > KnapTree.max.profit) {
 					KnapTree.max = this;
-					System.out.println("note achievable profit of " + profit);
+					message += "\nnote achievable profit of " + profit;
 				}
 				prune = false;
 			}
