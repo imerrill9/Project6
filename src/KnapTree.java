@@ -116,6 +116,8 @@ public class KnapTree
 				// Remove Parent
 				leaves.remove(current);
 			}
+		} else {
+			leaves.remove(current);
 		}
 	}
 
