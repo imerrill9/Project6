@@ -117,6 +117,7 @@ public class KnapTree
 				leaves.remove(current);
 			}
 		} else {
+			System.out.println("pruned as no additional items can be considered.");
 			leaves.remove(current);
 		}
 	}
