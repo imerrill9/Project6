@@ -80,7 +80,7 @@ public class KnapTree
 	public void makeChildren(KnapNode current)
 	{
 		if (current.level < items.size()) {
-			if (current.bound < max.profit && (current.level == KnapTree.items.size() - 1)) {
+			if (current.bound < max.profit && (current.capacityHit)) {
 				System.out.println("pruned because bound " + current.bound
 						+ " is smaller than known achievable profit " + max.profit);
 				// Remove Parent

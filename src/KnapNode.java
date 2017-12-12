@@ -16,6 +16,7 @@ public class KnapNode
 	public boolean prune;               //Should the node be pruned?
 	public String message;              //Holds the pruned message
 	public int level;                   //The level in the tree this node is created at
+	public static boolean capacityHit = false;
 
 	//node attributes
 	public KnapNode left;
@@ -97,6 +98,7 @@ public class KnapNode
 		if (KnapTree.max != null) {
 			if (weight == KnapTree.capacity) {
 				message = "hit capacity exactly so don't explore further";
+				capacityHit = true;
 				if (this.profit > KnapTree.max.profit) {
 					KnapTree.max = this;
 					message += "\nnote achievable profit of " + profit;

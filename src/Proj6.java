@@ -50,10 +50,7 @@ public class Proj6
 	{
 		Scanner fileScanner = new Scanner(new File(fileName));
 		int capacity = fileScanner.nextInt();
-		fileScanner.nextLine();
-
 		int numItems = fileScanner.nextInt();
-		fileScanner.nextLine();
 
 		ArrayList<Item> items = new ArrayList<>();
 
@@ -63,8 +60,6 @@ public class Proj6
 			int weight = fileScanner.nextInt();
 			Item item = new Item(itemIdx, price, weight);
 			items.add(item);
-
-			fileScanner.nextLine();
 		}
 
 		knapsackTree = new KnapTree(items, capacity);
