@@ -80,16 +80,16 @@ public class KnapTree
 	public void makeChildren(KnapNode current)
 	{
 		if (current.level < items.size()) {
-			if (current.bound < max.profit) {
+			if (current.bound < max.profit && (current.level == KnapTree.items.size() - 1)) {
 				System.out.println("pruned because bound " + current.bound
 						+ " is smaller than known achievable profit " + max.profit);
 				// Remove Parent
 				leaves.remove(current);
 			} else {
-
 				// Create left node list, not using next item (KnapTree.level)
 				ArrayList<Item> leftList = new ArrayList<Item>();
 				leftList.addAll(current.itemList);
+
 				// Create right node list, using next item (KnapTree.level)
 				ArrayList<Item> rightList = new ArrayList<Item>();
 				rightList.addAll(current.itemList);
@@ -115,6 +115,7 @@ public class KnapTree
 
 				// Remove Parent
 				leaves.remove(current);
+
 			}
 		} else {
 			System.out.println("pruned as no additional items can be considered.");

@@ -8,10 +8,10 @@ public class KnapNode
 {
 	private static int numNodes = 0;
 	private int id;                     //id of node
-	private int weight;                 //Weight of tourList this node considers
+	private double weight;              //Weight of tourList this node considers
 
 	public ArrayList<Item> itemList;    //The item list being considered by the node
-	public int profit;                  //The profit calculated by the node
+	public double profit;                  //The profit calculated by the node
 	public double bound;                //The bound calculated by the node
 	public boolean prune;               //Should the node be pruned?
 	public String message;              //Holds the pruned message
@@ -25,7 +25,6 @@ public class KnapNode
 	{
 		numNodes++;
 		id = numNodes;
-		this.itemList = items;
 		this.level = level;
 		this.itemList = items;
 		calculateWeight(items);
@@ -68,11 +67,8 @@ public class KnapNode
 	private void calculateBound()
 	{
 		bound = profit;
-		int pounds = weight;
+		double pounds = weight;
 		for (int i = level; i < KnapTree.items.size(); i++) {
-			if (pounds >= KnapTree.capacity) {
-				break;
-			} else {
 				bound += KnapTree.items.get(i).getPrice();
 				pounds += KnapTree.items.get(i).getWeight();
 				if (pounds > KnapTree.capacity) {
@@ -81,13 +77,13 @@ public class KnapNode
 					bound += fractionalProfit(pounds, KnapTree.items.get(i));
 					break;
 				}
-			}
 		}
+
 	}
 
-	private double fractionalProfit(int pounds, Item item)
+	private double fractionalProfit(double pounds, Item item)
 	{
-		int weightNeeded = KnapTree.capacity - pounds;
+		double weightNeeded = KnapTree.capacity - pounds;
 		double pricePerPound = item.getPrice() / item.getWeight();
 		return weightNeeded * pricePerPound;
 	}
@@ -108,10 +104,6 @@ public class KnapNode
 				prune = true;
 			} else if (weight > KnapTree.capacity) {
 				message = "pruned because too heavy";
-				prune = true;
-			} else if (bound < KnapTree.max.profit) {
-				message = "pruned because bound " + bound + " is smaller than known achievable profit "
-						+ KnapTree.max.profit;
 				prune = true;
 			} else {
 				message = "explore further";
